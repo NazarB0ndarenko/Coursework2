@@ -1,0 +1,12 @@
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_project_members_user ON project_members(user_id);
+CREATE INDEX idx_project_members_project ON project_members(project_id);
+CREATE INDEX idx_tasks_project ON tasks(project_id);
+CREATE INDEX idx_tasks_status ON tasks(status);
+CREATE INDEX idx_notifications_user ON notifications(user_id);
+CREATE INDEX idx_notifications_read ON notifications(has_been_read);
+CREATE INDEX idx_project_interactions_user ON project_interactions(user_id);
+CREATE INDEX idx_project_interactions_project ON project_interactions(project_id);
+CREATE INDEX idx_project_discussions_project ON project_discussions(project_id);
+CREATE INDEX idx_reports_reporter ON reports(reporter_user_id);
+CREATE INDEX idx_reports_accused ON reports(accused_user_id);

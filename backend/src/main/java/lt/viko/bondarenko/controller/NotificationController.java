@@ -1,0 +1,66 @@
+package lt.viko.bondarenko.controller;
+
+import lt.viko.bondarenko.dto.response.BasicMessageDto;
+import lt.viko.bondarenko.dto.response.HasUnreadDto;
+import lt.viko.bondarenko.dto.response.NotificationShortDto;
+import lt.viko.bondarenko.service.NotificationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/notifications")
+@Tag(name = "Notification API", description = "Endpoints for managing user notifications")
+public class NotificationController {
+
+    private final NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @Operation(summary = "Get all notifications", description = "Retrieves all notifications for the authenticated user with pagination support")
+    @GetMapping("/all")
+    public ResponseEntity<Page<NotificationShortDto>> getAllNotificationsByUser(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return new ResponseEntity<>(notificationService.getAllUserNotifications(page, size), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get read notifications", description = "Retrieves all read notifications for the user")
+    @GetMapping("/read")
+    public ResponseEntity<Page<NotificationShortDto>> getReadNotificationsByUser(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return new ResponseEntity<>(notificationService.getUserReadNotifications(page, size), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get unread notifications", description = "Retrieves all unread notifications for the user")
+    @GetMapping("/unread")
+    public ResponseEntity<Page<NotificationShortDto>> getUnreadNotificationsByUser(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "5") Integer size) {
+        return new ResponseEntity<>(notificationService.getUserUnreadNotifications(page, size), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Mark notification as read", description = "Marks a specific notification as read")
+    @PutMapping("/{notificationId}/mark-as-read")
+    public ResponseEntity<NotificationShortDto> markAsRead(@PathVariable Long notificationId) {
+        return new ResponseEntity<>(notificationService.markAsRead(notificationId), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Check unread notifications", description = "Checks if the user has unread notifications")
+    @GetMapping("/has-unread-messages")
+    public ResponseEntity<HasUnreadDto> userHasUnreadNotifications() {
+        return new ResponseEntity<>(notificationService.userHasUnreadNotifications(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Delete a notification", description = "Deletes a specific notification by ID")
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<BasicMessageDto> deleteNotification(@PathVariable Long notificationId) {
+        return new ResponseEntity<>(notificationService.deleteNotification(notificationId), HttpStatus.OK);
+    }
+}
