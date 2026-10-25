@@ -1,0 +1,27 @@
+services:
+  postgres_db:
+    image: "postgres:15.0"
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - spring-postgres-net
+    environment:
+      POSTGRES_DB: task-manager
+      POSTGRES_USER: Admin
+      POSTGRES_PASSWORD: strong_password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U Admin -d task-manager" ]
+      interval: 10s
+      retries: 10
+
+  redis:
+    image: "redis:7.4.2"
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - spring-postgres-net
+
+networks:
+  spring-postgres-net:
