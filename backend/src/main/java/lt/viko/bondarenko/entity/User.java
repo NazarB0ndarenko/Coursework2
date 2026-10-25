@@ -1,5 +1,8 @@
 package lt.viko.bondarenko.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import lt.viko.bondarenko.enums.AuthProvider;
 import lt.viko.bondarenko.enums.Role;
 
 import jakarta.persistence.Column;
@@ -17,6 +20,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -44,6 +49,14 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private AuthProvider authProvider = AuthProvider.LOCAL;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Notification> notifications = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
