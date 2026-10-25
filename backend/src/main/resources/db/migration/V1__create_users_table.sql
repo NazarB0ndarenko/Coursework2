@@ -1,0 +1,10 @@
+CREATE TABLE users (
+    user_id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    password VARCHAR(255),
+    role VARCHAR(50) NOT NULL DEFAULT 'NOT_CONFIRMED',
+    auth_provider VARCHAR(50) NOT NULL DEFAULT 'LOCAL',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,4 @@
+CREATE TABLE evidences (
+    id BIGSERIAL PRIMARY KEY,
+    url VARCHAR(500)
+);
